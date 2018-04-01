@@ -91,7 +91,7 @@ $violet: hsl(300, 100%, 50%);
 	}
 }
 
-$first-color: $violet;
+$first-color: #337ab7;  // Bootstrap's btn-primary color
 $second-color: complement($first-color);
 
 $color-1: harmonious-mix($second-color, $first-color);
@@ -125,10 +125,10 @@ $color-2: harmonious-mix($first-color, $second-color);
 
 $color-1: mix-neutral($color-2);
 $color-1-light: lighten($color-1, 65%);
-$color-1-dark: darken($color-1, 65%);
+$color-1-dark: darken($color-1, 35%);
 $color-2: mix-neutral($color-1);
-$color-2-light: lighten($color-2, 65%);
-$color-2-dark: darken($color-2, 65%);
+$color-2-light: lighten($color-2, 75%);
+$color-2-dark: darken($color-2, 15%);
 $white: lighten($color-2, 95%);
 $black: darken($color-2, 95%);
 
@@ -184,14 +184,15 @@ main {
     }
     input {
         // border-color: $color-2;
-        border-width: 2px;
-        padding: 1px;
+        border-width: 1px !important;
+        padding: 6px 12px !important;
     }
     input[type="button"] {
         // TODO change pagination colors so we can incorporate $color-1 et al
         background-color: #337ab7;
         // background-color: $color-1;
-        padding: 1px 5px;
+        color: $white;
+        // padding: 1px 5px;
     }
 }
 
