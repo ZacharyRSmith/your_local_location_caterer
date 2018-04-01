@@ -13,13 +13,13 @@
       </noscript>
       <div id="map"></div>
       <div class="map-toolbar">
-        <%= will_paginate @locations %>
         <div class="map-inputs-container">
           <%= label_tag "address", nil, class: "address" %>
           <input autofocus="true" id="address" type="textbox" placeholder="Enter new address...">
           <input type="button" value="Encode" onclick="codeAddress()">
         </div>
       </div>
+      <h3>Saved addresses:</h3>
       <table class="table table-hover table-striped">
         <thead>
           <tr>
