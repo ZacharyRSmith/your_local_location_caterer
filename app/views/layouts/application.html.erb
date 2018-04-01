@@ -51,7 +51,7 @@
     <script>
       window.yourLLC = {
         panTo: function(latLng) {
-          if (!map) return; // TODO 
+          if (!map) return; // TODO: alert user?
           latLng = latLng.split(',');
           var lat = parseInt(latLng[0], 10);
           var lng = parseInt(latLng[1], 10);

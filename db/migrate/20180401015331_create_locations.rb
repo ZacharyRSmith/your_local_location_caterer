@@ -4,7 +4,7 @@ class CreateLocations < ActiveRecord::Migration[5.1]
       t.string :formatted_address
       t.decimal :latitude
       t.decimal :longitude
-      
+
       t.timestamps
     end
     add_index :locations, [:latitude, :longitude], unique: true
