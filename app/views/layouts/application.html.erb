@@ -1,5 +1,3 @@
-<% provide(:title, "Hi") %>
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -10,6 +8,9 @@
     <%= render "layouts/header" %>
     <%= render "layouts/colors" if Rails.env.development? %>
     <main class="container">
+      <noscript>
+        <h1>Please enable JavaScript in your browser to use this website.</h1>
+      </noscript>
       <div id="map"></div>
       <div class="foo">
         <%= will_paginate @locations %>
