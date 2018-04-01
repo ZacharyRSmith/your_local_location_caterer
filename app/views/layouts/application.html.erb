@@ -20,7 +20,7 @@
         </div>
       </div>
       <h3>Saved addresses:</h3>
-      <table class="table table-hover table-striped">
+      <table class="table table-addresses table-hover table-striped">
         <thead>
           <tr>
             <th scope="col">Address</th>
@@ -85,6 +85,13 @@
               latitude: results[0].geometry.location.lat(),
               longitude: results[0].geometry.location.lng()
             };
+            // This ain't pretty, but it gets the job 80% done:
+            var newRow = '<tr onclick="yourLLC.panTo(' + location.latitude + ',' + location.longitude + ')">' +
+              '<th scope="row">' + location.formatted_address + '</th>' +
+              '<td>' + location.latitude + '</td>' +
+              '<td>' + location.longitude + '</td>' +
+            '</tr>';
+            $('.table-addresses').prepend(newRow);
             window.results = results;
             $.post( "locations", { location: location }, function( data ) {
               console.log(data)
