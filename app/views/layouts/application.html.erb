@@ -2,25 +2,7 @@
 <html>
   <head>
     <title>YourLocalLocationCaterer</title>
-    <%= csrf_meta_tags %>
-    <meta name="viewport" content="initial-scale=1.0">
-    <meta charset="utf-8">
-    <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map {
-        height: 320px;
-        width: 320px;
-      }
-      body {
-        margin: 0;
-      }
-    </style>
-
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
-
   <body>
     <div id="map" style="width: 320px; height: 480px;"></div>
     <div>
