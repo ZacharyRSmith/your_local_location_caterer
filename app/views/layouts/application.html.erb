@@ -11,35 +11,8 @@
       <noscript>
         <h1>Please enable JavaScript in your browser to use this website.</h1>
       </noscript>
-      <div id="map"></div>
-      <div class="map-toolbar">
-        <div class="map-inputs-container">
-          <%= label_tag "address", nil, class: "address" %>
-          <input autofocus="true" id="address" type="textbox" placeholder="Enter new address...">
-          <input type="button" value="Encode" onclick="codeAddress()">
-        </div>
-      </div>
-      <h3>Saved addresses:</h3>
-      <table class="table table-addresses table-hover table-striped">
-        <thead>
-          <tr>
-            <th scope="col">Address</th>
-            <th scope="col">Latitude</th>
-            <th scope="col">Longitude</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @locations.each do |location| %>
-            <tr onclick="yourLLC
-              && yourLLC.panTo('<%= location.latitude %>,<%= location.longitude %>')">
-              <th scope="row"><%= location.formatted_address %></th>
-              <td><%= location.latitude %></td>
-              <td><%= location.longitude %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-      <%= will_paginate @locations %>
+      <%= render "locations/map" %>
+      <%= render "locations/table" %>
     <main>
 
     <script>

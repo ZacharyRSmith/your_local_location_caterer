@@ -1,0 +1,16 @@
+<h3>Saved locations:</h3>
+<table class="table table-addresses table-hover table-striped">
+<thead>
+    <tr>
+    <th scope="col">Address</th>
+    <th scope="col">Latitude</th>
+    <th scope="col">Longitude</th>
+    </tr>
+</thead>
+<tbody>
+    <% @locations.each do |location| %>
+    <%= render partial: "locations/location", locals: { location: location } %>
+    <% end %>
+</tbody>
+</table>
+<%= will_paginate @locations %>
