@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
 
   def hello
     @locations = Location.paginate(page: params[:page])
+    @title = "Your Local Location Caterer"
     render 'layouts/application'
   end
 end

@@ -1,18 +1,24 @@
+<% provide(:title, "Hi") %>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>YourLocalLocationCaterer</title>
+    <title><%= @title %></title>
     <%= render "layouts/head_tags" %>
   </head>
   <body>
-    <main>
-      <div id="map" style="width: 320px; height: 480px;"></div>
-      <div>
-        <%= label_tag "address", "New address:" %>
-        <input id="address" type="textbox" value="Sydney, NSW">
-        <input type="button" value="Encode" onclick="codeAddress()">
+    <%= render "layouts/colors" if Rails.env.development? %>
+    <%= render "layouts/header" %>
+    <main class="container">
+      <div id="map"></div>
+      <div class="foo">
+        <%= will_paginate @locations %>
+        <div class="map-inputs-container">
+          <%= label_tag "address", nil, class: "address" %>
+          <input id="address" type="textbox" placeholder="Enter new address...">
+          <input type="button" value="Encode" onclick="codeAddress()">
+        </div>
       </div>
-      <%= will_paginate @locations %>
       <table class="table table-hover table-striped">
         <thead>
           <tr>

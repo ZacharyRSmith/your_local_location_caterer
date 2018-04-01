@@ -1,6 +1,200 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
+
+// https://tallys.github.io/color-theory/
+// Color wheel applied
+
+$red: 	 hsl(355, 100%, 50%);
+$orange: hsl(20, 100%, 50%);
+$yellow: hsl(60, 100%, 50%);
+$green:  hsl(120, 100%, 50%);
+$cyan:   hsl(180, 100%, 50%);
+$blue:   hsl(240, 100%, 50%);
+$violet: hsl(300, 100%, 50%);
+
+@function is-cool-color($color) {
+	@return hue($color) < 300 and hue($color) > 120;
+}
+@function is-high-key-value($color) {
+	@return hue($color) > 30 and hue($color) < 140;
+}
+//Establish a relationship (similar lighting conditions) between colors.
+@function harmonious-mix($mix, $base) {
+	@if (is-cool-color($mix)){
+		@if is-high-key-value($base) {
+			@return mix($mix, $base, 11%);
+		}
+		@else {
+			@return mix($mix, $base, 16%);
+		}
+	}
+	@else {
+		@if is-high-key-value($base) {
+			@return mix($mix, $base, 13%);
+		}
+		@else {
+			@return mix($mix, $base, 23%);
+		}
+	}
+}
+@function mix-neutral($color) {
+	@if (is-highest-key-value($color)) {
+		@if is-high-key-value(complement($color)) {
+			@return mix(complement($color), $color, 19%);
+		}
+		@else {
+			@return mix(complement($color), $color, 13%);
+		}
+	}
+	@else if (is-high-key-value($color)) {
+		@if is-high-key-value(complement($color)) {
+			@return mix(complement($color), $color, 31%);
+		}
+		@else {
+			@return mix(complement($color), $color, 23%);
+		}
+	}
+	@else {
+		@if is-highest-key-value(complement($color)) {
+			@return mix(complement($color), $color, 31%);
+		}
+		@if is-high-key-value(complement($color)) {
+			@return mix(complement($color), $color, 26%);
+		}
+		@else {
+			@return mix(complement($color), $color, 23%);
+		}
+	}
+}
+@function pick-contrast($color) {
+	@if is-high-key-value($color){
+		@if lightness($color) < 30% {
+			@return lighten(complement($color), 86);
+		}
+		@else if lightness($color) > 70% {
+			@return darken(complement($color), 68);
+		}
+		@else {
+			@return darken(complement($color), 53);
+		}
+} @else {
+	@if lightness($color) < 30% {
+			@return lighten(complement($color), 86);
+		}
+		@else if lightness($color) > 70% {
+			@return darken(complement($color), 68);
+		}
+		@else {
+			@return lighten(complement($color), 53);
+		}
+	}
+}
+
+$first-color: $violet;
+$second-color: complement($first-color);
+
+$color-1: harmonious-mix($second-color, $first-color);
+$color-2: harmonious-mix($first-color, $second-color);
+
+// https://github.com/sass/sass/issues/598
+@function strip-unit($number)
+{
+	@if type-of($number) == 'number' and not unitless($number)
+	{
+		@return $number / ($number * 0 + 1);
+	}
+	@return $number;
+}
+@function mix($color1, $color2, $amount)
+{
+	$amount: strip-unit($amount) / 100;
+	@return rgb(
+		red($color1) * (1 - $amount) + red($color2) * $amount,
+		green($color1) * (1 - $amount) + green($color2) * $amount,
+		blue($color1) * (1 - $amount) + blue($color2) * $amount);
+}
+@function lighten($color, $amount)
+{
+	@return mix($color, #ffffff, $amount);
+}
+@function darken($color, $amount)
+{
+	@return mix($color, #000000, $amount);
+}
+
+$color-1: mix-neutral($color-2);
+$color-1-light: lighten($color-1, 65%);
+$color-1-dark: darken($color-1, 65%);
+$color-2: mix-neutral($color-1);
+$color-2-light: lighten($color-2, 65%);
+$color-2-dark: darken($color-2, 65%);
+$white: lighten($color-2, 95%);
+$black: darken($color-2, 95%);
+
+body {
+    background-color: $white;
+    color: $black;
+}
+#color-swatch {
+    display: flex;
+    height: 20px;
+    > div {
+        flex: 1;
+    }
+    .color-1 {
+        background-color: $color-1;
+    }
+    .color-1-b {
+        background-color: $color-1-light;
+    }
+    .color-1-c {
+        background-color: $color-1-dark;
+    }
+    .color-2 {
+        background-color: $color-2;
+    }
+    .color-2-b {
+        background-color: $color-2-light;
+    }
+    .color-2-c {
+        background-color: $color-2-dark;
+    }
+}
+
+#map {
+    height: 480px;
+}
+
+.map-inputs-container {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    label.address {
+        visibility: hidden; // This label is for accessibility only.
+    }
+    input[type="button"] {
+        background-color: $color-1;
+    }
+}
+
+.page-header {
+    background-color: $color-2-light;
+    color: $color-2-dark;
+    display: flex;
+    justify-content: center;
+    margin-top: 0;   
+}
+
+.pagination {
+    display: inline;
+}
+
+.foo {
+    display: flex;
+    justify-content: space-between;
+}
+
 .table-hover > tbody > tr:hover {
     cursor: pointer;
 }
