@@ -1,17 +1,4 @@
-// Place all the styles related to the Locations controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
-// https://tallys.github.io/color-theory/
-// Color wheel applied
-
-$red: 	 hsl(355, 100%, 50%);
-$orange: hsl(20, 100%, 50%);
-$yellow: hsl(60, 100%, 50%);
-$green:  hsl(120, 100%, 50%);
-$cyan:   hsl(180, 100%, 50%);
-$blue:   hsl(240, 100%, 50%);
-$violet: hsl(300, 100%, 50%);
-
+// BEGIN https://tallys.github.io/color-theory/
 @function is-cool-color($color) {
 	@return hue($color) < 300 and hue($color) > 120;
 }
@@ -89,3 +76,31 @@ $violet: hsl(300, 100%, 50%);
 		}
 	}
 }
+// END https://tallys.github.io/color-theory/
+
+// BEGIN https://github.com/sass/sass/issues/598
+@function strip-unit($number)
+{
+	@if type-of($number) == 'number' and not unitless($number)
+	{
+		@return $number / ($number * 0 + 1);
+	}
+	@return $number;
+}
+@function mix($color1, $color2, $amount)
+{
+	$amount: strip-unit($amount) / 100;
+	@return rgb(
+		red($color1) * (1 - $amount) + red($color2) * $amount,
+		green($color1) * (1 - $amount) + green($color2) * $amount,
+		blue($color1) * (1 - $amount) + blue($color2) * $amount);
+}
+@function lighten($color, $amount)
+{
+	@return mix($color, #ffffff, $amount);
+}
+@function darken($color, $amount)
+{
+	@return mix($color, #000000, $amount);
+}
+// END https://github.com/sass/sass/issues/598

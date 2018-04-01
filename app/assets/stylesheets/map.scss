@@ -1,0 +1,29 @@
+@import "colors";
+
+#map {
+    margin-top: 35px;
+    height: 480px;
+}
+
+.map-toolbar {
+    display: flex;
+    justify-content: space-between;
+}
+
+.map-inputs-container {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    label.address {
+        visibility: hidden; // This label is for accessibility only.
+    }
+    input {
+        border-width: 1px;
+        padding: 6px 12px;
+    }
+    input[type="button"] {
+        background-color: $color-1;
+        color: $white;
+        // padding: 1px 5px;
+    }
+}
