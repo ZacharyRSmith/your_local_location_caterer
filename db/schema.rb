@@ -11,7 +11,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 20180401015331) do
-
   create_table "locations", force: :cascade do |t|
     t.string "formatted_address"
     t.decimal "latitude"
@@ -20,5 +19,4 @@ ActiveRecord::Schema.define(version: 20180401015331) do
     t.datetime "updated_at", null: false
     t.index ["latitude", "longitude"], name: "index_locations_on_latitude_and_longitude", unique: true
   end
-
 end

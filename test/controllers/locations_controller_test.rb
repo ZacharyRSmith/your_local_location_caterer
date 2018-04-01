@@ -11,5 +11,4 @@ class LocationsControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :success
   end
-
 end

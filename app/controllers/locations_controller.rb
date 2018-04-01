@@ -1,6 +1,7 @@
+# Controls the creation of Locations.
 class LocationsController < ApplicationController
   # Make it easy to use POSTMAN:
-  skip_before_action :verify_authenticity_token if !Rails.env.production?
+  skip_before_action :verify_authenticity_token unless Rails.env.production?
 
   def create
     location = Location.new(location_params)
@@ -13,7 +14,7 @@ class LocationsController < ApplicationController
 
   private
 
-    def location_params
-      params.require(:location).permit(:formatted_address, :latitude, :longitude)
-    end
+  def location_params
+    params.require(:location).permit(:formatted_address, :latitude, :longitude)
+  end
 end
