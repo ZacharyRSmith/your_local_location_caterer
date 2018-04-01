@@ -1,35 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title>YourLocalLocationCaterer</title>
   </head>
   <body>
-    <div id="map" style="width: 320px; height: 480px;"></div>
-    <div>
-      <input id="address" type="textbox" value="Sydney, NSW">
-      <input type="button" value="Encode" onclick="codeAddress()">
-    </div>
-    <%= will_paginate @locations %>
-    <table class="table table-hover table-striped">
-      <thead>
-        <tr>
-          <th scope="col">Address</th>
-          <th scope="col">Latitude</th>
-          <th scope="col">Longitude</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @locations.each do |location| %>
-          <tr onclick="yourLLC
-            && yourLLC.panTo('<%= location.latitude %>,<%= location.longitude %>')">
-            <th scope="row"><%= location.formatted_address %></th>
-            <td><%= location.latitude %></td>
-            <td><%= location.longitude %></td>
+    <main>
+      <div id="map" style="width: 320px; height: 480px;"></div>
+      <div>
+        <%= label_tag "address", "New address:" %>
+        <input id="address" type="textbox" value="Sydney, NSW">
+        <input type="button" value="Encode" onclick="codeAddress()">
+      </div>
+      <%= will_paginate @locations %>
+      <table class="table table-hover table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Address</th>
+            <th scope="col">Latitude</th>
+            <th scope="col">Longitude</th>
           </tr>
-        <% end %>
-      </tbody>
-    </table>
-    <%= will_paginate @locations %>
+        </thead>
+        <tbody>
+          <% @locations.each do |location| %>
+            <tr onclick="yourLLC
+              && yourLLC.panTo('<%= location.latitude %>,<%= location.longitude %>')">
+              <th scope="row"><%= location.formatted_address %></th>
+              <td><%= location.latitude %></td>
+              <td><%= location.longitude %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <%= will_paginate @locations %>
+    <main>
+
     <script>
       window.yourLLC = {
         panTo: function(latLng) {
