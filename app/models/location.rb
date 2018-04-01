@@ -1,4 +1,5 @@
 class Location < ApplicationRecord
+  self.per_page = 5
   validates :formatted_address, {
     presence: true }
   validates :latitude, {

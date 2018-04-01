@@ -27,7 +27,48 @@
       <input id="address" type="textbox" value="Sydney, NSW">
       <input type="button" value="Encode" onclick="codeAddress()">
     </div>
+    <%= will_paginate @locations %>
+    <table class="table table-hover table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Address</th>
+          <th scope="col">Latitude</th>
+          <th scope="col">Longitude</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @locations.each do |location| %>
+          <tr onclick="yourLLC
+            && yourLLC.panTo('<%= location.latitude %>,<%= location.longitude %>')">
+            <th scope="row"><%= location.formatted_address %></th>
+            <td><%= location.latitude %></td>
+            <td><%= location.longitude %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <%= will_paginate @locations %>
     <script>
+      window.yourLLC = {
+        panTo: function(latLng) {
+          if (!map) return; // TODO 
+          latLng = latLng.split(',');
+          var lat = parseInt(latLng[0], 10);
+          var lng = parseInt(latLng[1], 10);
+          new google.maps.Marker({
+              map: map,
+              position: {
+                lat: lat,
+                lng: lng
+              }
+          });
+          map.panTo({
+            lat: lat,
+            lng: lng
+          });
+        }
+      };
+
       var geocoder;
       var map;
       function initialize() {
@@ -60,6 +101,7 @@
                 position: results[0].geometry.location
             });
           } else {
+            // TODO POST to server for logging purposes
             alert('Geocode was not successful for the following reason: ' + status);
           }
         });
