@@ -11,39 +11,57 @@
       <noscript>
         <h1>Please enable JavaScript in your browser to use this website.</h1>
       </noscript>
-      <div id="map"></div>
-      <div class="map-toolbar">
-        <%= will_paginate @locations %>
-        <div class="map-inputs-container">
-          <%= label_tag "address", nil, class: "address" %>
-          <input autofocus="true" id="address" type="textbox" placeholder="Enter new address...">
-          <input type="button" value="Encode" onclick="codeAddress()">
-        </div>
-      </div>
-      <table class="table table-hover table-striped">
-        <thead>
-          <tr>
-            <th scope="col">Address</th>
-            <th scope="col">Latitude</th>
-            <th scope="col">Longitude</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @locations.each do |location| %>
-            <tr onclick="yourLLC
-              && yourLLC.panTo('<%= location.latitude %>,<%= location.longitude %>')">
-              <th scope="row"><%= location.formatted_address %></th>
-              <td><%= location.latitude %></td>
-              <td><%= location.longitude %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-      <%= will_paginate @locations %>
+      <%= render "locations/map" %>
+      <%= render "locations/table" %>
     <main>
 
+    <!-- TODO Move this script somewhere prettier... -->
     <script>
+      var geocoder;
+      var map;
+
+      // Init namespace. "LLC" for "Local Location Caterer".
       window.yourLLC = {
+        codeAddress: function codeAddress() {
+          var address = document.getElementById('address').value;
+          geocoder.geocode( { 'address': address}, function(results, status) {
+            if (status == 'OK') {
+              var location = {
+                formatted_address: results[0].formatted_address,
+                latitude: results[0].geometry.location.lat(),
+                longitude: results[0].geometry.location.lng()
+              };
+              // This ain't pretty, but it gets the job 80% done:
+              var newRow = '<tr onclick="yourLLC.panTo(' + location.latitude + ',' + location.longitude + ')">' +
+                '<th scope="row">' + location.formatted_address + '</th>' +
+                '<td>' + location.latitude + '</td>' +
+                '<td>' + location.longitude + '</td>' +
+              '</tr>';
+              $('.table-addresses').prepend(newRow);
+              $.post( "locations", { location: location }, function( data ) {
+                // console.log(data)
+                // TODO Alert user if err
+              });
+              map.setCenter(results[0].geometry.location);
+              var marker = new google.maps.Marker({
+                  map: map,
+                  position: results[0].geometry.location
+              });
+            } else {
+              // TODO POST to server for logging purposes
+              alert('Geocode was not successful for the following reason: ' + status);
+            }
+          });
+        },
+        initialize: function initialize() {
+          geocoder = new google.maps.Geocoder();
+          var latlng = new google.maps.LatLng(33.7489954, -84.3879824);
+          var mapOptions = {
+            zoom: 8,
+            center: latlng
+          }
+          map = new google.maps.Map(document.getElementById('map'), mapOptions);
+        },
         panTo: function(latLng) {
           if (!map) return; // TODO: alert user?
           latLng = latLng.split(',');
@@ -62,46 +80,8 @@
           });
         }
       };
-
-      var geocoder;
-      var map;
-      function initialize() {
-        geocoder = new google.maps.Geocoder();
-        var latlng = new google.maps.LatLng(33.7489954, -84.3879824);
-        // var latlng = new google.maps.LatLng(-34.397, 150.644);
-        var mapOptions = {
-          zoom: 8,
-          center: latlng
-        }
-        map = new google.maps.Map(document.getElementById('map'), mapOptions);
-      }
-      function codeAddress() {
-        var address = document.getElementById('address').value;
-        geocoder.geocode( { 'address': address}, function(results, status) {
-          if (status == 'OK') {
-            console.log('results', results);
-            var location = {
-              formatted_address: results[0].formatted_address,
-              latitude: results[0].geometry.location.lat(),
-              longitude: results[0].geometry.location.lng()
-            };
-            window.results = results;
-            $.post( "locations", { location: location }, function( data ) {
-              console.log(data)
-            });
-            map.setCenter(results[0].geometry.location);
-            var marker = new google.maps.Marker({
-                map: map,
-                position: results[0].geometry.location
-            });
-          } else {
-            // TODO POST to server for logging purposes
-            alert('Geocode was not successful for the following reason: ' + status);
-          }
-        });
-      }
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo-qtBceEp1p3EGEJRd-35TK7ME6uaSLE&callback=initialize"
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo-qtBceEp1p3EGEJRd-35TK7ME6uaSLE&callback=yourLLC.initialize"
     async defer>
     </script>
   </body>
