@@ -4,6 +4,8 @@ A single web page that allows a user to input an address and geocode it using th
 
 It also lists previously saved locations.
 
+NOTE WELL: This uses a development/testing registration with the Google Maps Geocoding API. This app is not production-ready. [See more here](https://developers.google.com/maps/documentation/geocoding/get-api-key).
+
 ## License
 
 All source code is available jointly under the MIT License and the Beerware License.
