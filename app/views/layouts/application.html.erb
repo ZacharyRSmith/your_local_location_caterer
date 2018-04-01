@@ -16,7 +16,7 @@
         <%= will_paginate @locations %>
         <div class="map-inputs-container">
           <%= label_tag "address", nil, class: "address" %>
-          <input id="address" type="textbox" placeholder="Enter new address...">
+          <input autofocus="true" id="address" type="textbox" placeholder="Enter new address...">
           <input type="button" value="Encode" onclick="codeAddress()">
         </div>
       </div>
