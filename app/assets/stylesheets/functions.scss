@@ -1,0 +1,106 @@
+// BEGIN https://tallys.github.io/color-theory/
+@function is-cool-color($color) {
+	@return hue($color) < 300 and hue($color) > 120;
+}
+@function is-high-key-value($color) {
+	@return hue($color) > 30 and hue($color) < 140;
+}
+//Establish a relationship (similar lighting conditions) between colors.
+@function harmonious-mix($mix, $base) {
+	@if (is-cool-color($mix)){
+		@if is-high-key-value($base) {
+			@return mix($mix, $base, 11%);
+		}
+		@else {
+			@return mix($mix, $base, 16%);
+		}
+	}
+	@else {
+		@if is-high-key-value($base) {
+			@return mix($mix, $base, 13%);
+		}
+		@else {
+			@return mix($mix, $base, 23%);
+		}
+	}
+}
+@function mix-neutral($color) {
+	@if (is-highest-key-value($color)) {
+		@if is-high-key-value(complement($color)) {
+			@return mix(complement($color), $color, 19%);
+		}
+		@else {
+			@return mix(complement($color), $color, 13%);
+		}
+	}
+	@else if (is-high-key-value($color)) {
+		@if is-high-key-value(complement($color)) {
+			@return mix(complement($color), $color, 31%);
+		}
+		@else {
+			@return mix(complement($color), $color, 23%);
+		}
+	}
+	@else {
+		@if is-highest-key-value(complement($color)) {
+			@return mix(complement($color), $color, 31%);
+		}
+		@if is-high-key-value(complement($color)) {
+			@return mix(complement($color), $color, 26%);
+		}
+		@else {
+			@return mix(complement($color), $color, 23%);
+		}
+	}
+}
+@function pick-contrast($color) {
+	@if is-high-key-value($color){
+		@if lightness($color) < 30% {
+			@return lighten(complement($color), 86);
+		}
+		@else if lightness($color) > 70% {
+			@return darken(complement($color), 68);
+		}
+		@else {
+			@return darken(complement($color), 53);
+		}
+} @else {
+	@if lightness($color) < 30% {
+			@return lighten(complement($color), 86);
+		}
+		@else if lightness($color) > 70% {
+			@return darken(complement($color), 68);
+		}
+		@else {
+			@return lighten(complement($color), 53);
+		}
+	}
+}
+// END https://tallys.github.io/color-theory/
+
+// BEGIN https://github.com/sass/sass/issues/598
+@function strip-unit($number)
+{
+	@if type-of($number) == 'number' and not unitless($number)
+	{
+		@return $number / ($number * 0 + 1);
+	}
+	@return $number;
+}
+@function mix($color1, $color2, $amount)
+{
+	$amount: strip-unit($amount) / 100;
+	@return rgb(
+		red($color1) * (1 - $amount) + red($color2) * $amount,
+		green($color1) * (1 - $amount) + green($color2) * $amount,
+		blue($color1) * (1 - $amount) + blue($color2) * $amount);
+}
+@function lighten($color, $amount)
+{
+	@return mix($color, #ffffff, $amount);
+}
+@function darken($color, $amount)
+{
+	@return mix($color, #000000, $amount);
+}
+// END https://github.com/sass/sass/issues/598

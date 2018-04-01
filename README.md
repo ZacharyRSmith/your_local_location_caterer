@@ -4,6 +4,8 @@ A single web page that allows a user to input an address and geocode it using th
 
 It also lists previously saved locations.
 
+NOTE WELL: This uses a development/testing registration with the Google Maps Geocoding API. This app is not production-ready. [See more here](https://developers.google.com/maps/documentation/geocoding/get-api-key).
+
 ## License
 
 All source code is available jointly under the MIT License and the Beerware License.
@@ -17,7 +19,6 @@ $ bundle install --without production
 ```
 
 Next, migrate the database:
-
 ```
 $ rails db:migrate
 ```
@@ -27,7 +28,7 @@ Finally, run the test suite to verify that everything is working correctly:
 ```
 $ rails test
 // or
-$ guard
+$ guard <-- !! WARNING !! currently failing due to bad setup
 ```
 
 If the test suite passes, you'll be ready to run the app in a local server:

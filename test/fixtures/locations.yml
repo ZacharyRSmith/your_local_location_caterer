@@ -1,0 +1,45 @@
+atlanta:
+  formatted_address: "Atlanta, GA, USA"
+  latitude: 0.337489954e2
+  longitude: -0.843879824e2
+
+sydney:
+  formatted_address: "Sydney NSW, Australia"
+  latitude: -0.338688197e2
+  longitude: 0.1512092955e3
+
+marietta:
+  formatted_address: "Marietta, GA, USA"
+  latitude: 0.33952602e2
+  longitude: -0.845499327e2
+
+chicago:
+  formatted_address: "Chicago, IL, USA"
+  latitude: 0.418781136e2
+  longitude: -0.876297982e2
+
+ny:
+  formatted_address: "New York, NY, USA"
+  latitude: 0.407127753e2
+  longitude: -0.740059728e2
+
+beijing:
+  formatted_address: "Beijing, China"
+  latitude: 0.399041999e2
+  longitude: 0.1164073963e3
+
+# formatted_address: "Seoul, South Korea",
+# latitude: 0.37566535e2,
+# longitude: 0.1269779692e3,
+
+# formatted_address: "New Delhi, Delhi, India",
+# latitude: 0.286139391e2,
+# longitude: 0.772090212000001e2,
+
+# formatted_address: "Abuja, Nigeria",
+# latitude: 0.90764785e1,
+# longitude: 0.739857400000005e1,
+
+# formatted_address: "Brasília - Brasilia, Federal District, Brazil",
+# latitude: -0.157942287e2,
+# longitude: -0.478821658e2,

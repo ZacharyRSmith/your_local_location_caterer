@@ -1,0 +1,38 @@
+@import "bootstrap-sprockets";
+@import "bootstrap";
+
+@import "colors";
+
+body {
+    background-color: $white;
+    color: $black;
+    padding-top: 65px;  // So bootstrap's .navbar-fixed-top + header.navbar borders does not overlay
+}
+// TODO autofocus address input
+
+header.navbar {
+    background-color: $color-2-light;
+    // !! WARNING !! body padding-top must stay in-sync with these borders:
+    border-top: 4px solid $color-2-dark;
+    border-bottom: 1px solid $color-2;
+    color: $color-2-dark;
+    display: flex;
+    justify-content: center;
+}
+
+main {
+    margin-bottom: 35px;
+}
+
+// TODO put in own stylesheet
+// Override bootstrap:
+.pagination {
+    display: inline;
+}
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: $color-2-light;
+}
+.table-hover > tbody > tr:hover {
+    background-color: $color-2;
+    cursor: pointer;
+}
