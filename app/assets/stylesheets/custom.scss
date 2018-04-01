@@ -135,6 +135,7 @@ $black: darken($color-2, 95%);
 body {
     background-color: $white;
     color: $black;
+    padding-top: 65px;  // So bootstrap's .navbar-fixed-top + header.navbar borders does not overlay
 }
 #color-swatch {
     display: flex;
@@ -162,8 +163,16 @@ body {
     }
 }
 
+main {
+    margin-bottom: 35px;
+}
+
 #map {
+    margin-top: 35px;
     height: 480px;
+}
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: $color-2-light;
 }
 
 .map-inputs-container {
@@ -173,17 +182,27 @@ body {
     label.address {
         visibility: hidden; // This label is for accessibility only.
     }
+    input {
+        // border-color: $color-2;
+        border-width: 2px;
+        padding: 1px;
+    }
     input[type="button"] {
-        background-color: $color-1;
+        // TODO change pagination colors so we can incorporate $color-1 et al
+        background-color: #337ab7;
+        // background-color: $color-1;
+        padding: 1px 5px;
     }
 }
 
-.page-header {
+header.navbar {
     background-color: $color-2-light;
+    // !! WARNING !! body padding-top must stay in-sync with these borders:
+    border-top: 4px solid $color-2-dark;
+    border-bottom: 1px solid $color-2;
     color: $color-2-dark;
     display: flex;
     justify-content: center;
-    margin-top: 0;   
 }
 
 .pagination {
@@ -195,6 +214,9 @@ body {
     justify-content: space-between;
 }
 
+// TODO put in own stylesheet
+// Override bootstrap:
 .table-hover > tbody > tr:hover {
+    background-color: $color-2;
     cursor: pointer;
 }

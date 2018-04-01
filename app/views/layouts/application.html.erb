@@ -7,8 +7,8 @@
     <%= render "layouts/head_tags" %>
   </head>
   <body>
-    <%= render "layouts/colors" if Rails.env.development? %>
     <%= render "layouts/header" %>
+    <%= render "layouts/colors" if Rails.env.development? %>
     <main class="container">
       <div id="map"></div>
       <div class="foo">
