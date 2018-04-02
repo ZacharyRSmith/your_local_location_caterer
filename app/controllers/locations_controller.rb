@@ -13,7 +13,7 @@ class LocationsController < ApplicationController
   end
 
   def index
-    locations = Location.paginate(page: params[:page])
+    locations = Location.order("formatted_address ASC").paginate(page: params[:page])
     render json: {
       count: locations.count,
       locations: locations,
