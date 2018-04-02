@@ -21,64 +21,59 @@
       var map;
 
       // Init namespace. "LLC" for "Local Location Caterer".
-      window.yourLLC = {
-        codeAddress: function codeAddress() {
-          var address = document.getElementById('address').value;
-          geocoder.geocode( { 'address': address}, function(results, status) {
-            if (status == 'OK') {
-              var location = {
-                formatted_address: results[0].formatted_address,
-                latitude: results[0].geometry.location.lat(),
-                longitude: results[0].geometry.location.lng()
-              };
-              // This ain't pretty, but it gets the job 80% done:
-              var newRow = '<tr onclick="yourLLC.panTo(' + location.latitude + ',' + location.longitude + ')">' +
-                '<th scope="row">' + location.formatted_address + '</th>' +
-                '<td>' + location.latitude + '</td>' +
-                '<td>' + location.longitude + '</td>' +
-              '</tr>';
-              $('.table-addresses').prepend(newRow);
-              $.post( "locations", { location: location }, function( data ) {
-                // console.log(data)
-                // TODO Alert user if err
-              });
-              map.setCenter(results[0].geometry.location);
-              var marker = new google.maps.Marker({
-                  map: map,
-                  position: results[0].geometry.location
-              });
-            } else {
-              // TODO POST to server for logging purposes
-              alert('Geocode was not successful for the following reason: ' + status);
-            }
-          });
-        },
-        initialize: function initialize() {
-          geocoder = new google.maps.Geocoder();
-          var latlng = new google.maps.LatLng(33.7489954, -84.3879824);
-          var mapOptions = {
-            zoom: 8,
-            center: latlng
-          }
-          map = new google.maps.Map(document.getElementById('map'), mapOptions);
-        },
-        panTo: function(latLng) {
-          if (!map) return; // TODO: alert user?
-          latLng = latLng.split(',');
-          var lat = parseFloat(latLng[0], 10);
-          var lng = parseFloat(latLng[1], 10);
-          new google.maps.Marker({
-              map: map,
-              position: {
-                lat: lat,
-                lng: lng
+      window.yourLLC = window.yourLLC || {};
+      window.yourLLC.codeAddress = function codeAddress() {
+        var address = document.getElementById('address').value;
+        geocoder.geocode( { 'address': address}, function(results, status) {
+          if (status == 'OK') {
+            var location = {
+              formatted_address: results[0].formatted_address,
+              latitude: results[0].geometry.location.lat(),
+              longitude: results[0].geometry.location.lng()
+            };
+            $.post( "locations", { location: location }, function postLocationsCb() {
+              if (window.yourLLC.Page) {
+                window.yourLLC.Page.fetchLocations();
               }
-          });
-          map.panTo({
-            lat: lat,
-            lng: lng
-          });
+            }).fail(function(_, _, errMsg) {
+              alert(errMsg);
+            });
+            map.setCenter(results[0].geometry.location);
+            var marker = new google.maps.Marker({
+                map: map,
+                position: results[0].geometry.location
+            });
+          } else {
+            // TODO POST to server for logging purposes
+            alert('Geocode was not successful for the following reason: ' + status);
+          }
+        });
+      };
+      window.yourLLC.initialize = function initialize() {
+        geocoder = new google.maps.Geocoder();
+        var latlng = new google.maps.LatLng(33.7489954, -84.3879824);
+        var mapOptions = {
+          zoom: 8,
+          center: latlng
         }
+        map = new google.maps.Map(document.getElementById('map'), mapOptions);
+      };
+      window.yourLLC.panTo = function panTo(latLng) {
+        if (!map) return; // TODO: alert user?
+        latLng = latLng.split(',');
+        var lat = parseFloat(latLng[0], 10);
+        var lng = parseFloat(latLng[1], 10);
+        new google.maps.Marker({
+            map: map,
+            position: {
+              lat: lat,
+              lng: lng
+            }
+        });
+        map.panTo({
+          lat: lat,
+          lng: lng
+        });
       };
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBo-qtBceEp1p3EGEJRd-35TK7ME6uaSLE&callback=yourLLC.initialize"

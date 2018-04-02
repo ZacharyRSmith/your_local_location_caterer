@@ -1,5 +1,5 @@
 <h3>Saved locations:</h3>
-<table class="table table-addresses table-hover table-striped">
+<table id="locations-table" class="table table-addresses table-hover table-striped">
 <thead>
     <tr>
     <th scope="col">Address</th>
@@ -8,9 +8,78 @@
     </tr>
 </thead>
 <tbody>
-    <% @locations.each do |location| %>
-    <%= render partial: "locations/location", locals: { location: location } %>
-    <% end %>
 </tbody>
 </table>
-<%= will_paginate @locations %>
+<nav aria-label="Pagination for #locations-table">
+  <ul id="locations-pagination" class="pagination">
+  </ul>
+</nav>
+<script>
+    // TODO: Indicate loading/failed states
+    // TODO: Prevent async issues
+    var crntPageNum = 1;
+    var Page = {
+        get _crntNum() {
+            return crntPageNum;
+        },
+        set _crntNum(nextPageNum) {
+            $($('#locations-pagination .page-item')[crntPageNum - 1]).removeClass('active');
+            $($('#locations-pagination .page-item')[nextPageNum - 1]).addClass('active');
+            crntPageNum = nextPageNum;
+        },
+        fetchLocations(args) {
+            var page = args && args.page ? args.page : crntPageNum;
+            $.getJSON('/locations', { page: page })
+            .done(function doneCb(results){
+                Page.renderLocations(results.locations);
+
+                var numNewPageLinks = Math.ceil(results.count / results.perPage);
+                if (numNewPageLinks !== Page.pageLinks.length) {
+                    Page.renderNumLinks(numNewPageLinks);
+                }
+            })
+            .fail(alert); // TODO Prettify
+        },
+        get pageLinks() {
+            return document.querySelectorAll('#locations-pagination .page-link');
+        },
+        renderLocations(locations) {
+            $('#locations-table tbody').html((function htmlCb(){
+                return locations.reduce(function reduceCb(rows, location) {
+                    return rows +
+                        '<tr onclick="yourLLC && yourLLC.panTo(' + location.latitude + ',' + location.longitude + ')">' +
+                            '<th scope="row">' + location.formatted_address + '</th>' +
+                            '<td>' + location.latitude + '</td>' +
+                            '<td>' + location.longitude + '</td>' +
+                        '</tr>';
+                }, '');
+            }));
+        },
+        renderNumLinks(num) {
+            $('#locations-pagination').html((function (){
+                var links = '';
+                for (var index = 0; index < num; index++) {
+                    links +=
+                        '<li class="page-item' + (Page._crntNum == (index + 1) ? ' active' : '') + '">' +
+                            '<a class="page-link">' + (index + 1) + '</a>' +
+                        '</li>';
+                }
+                return links;
+            }));
+        },
+        setClickDelegation() {
+            $('#locations-pagination').on('click', '.page-link', function onClick(event) {
+                var pageClicked = parseInt(event.target.innerText, 10);
+                if (pageClicked !== Page._crntNum) {
+                    Page._crntNum = pageClicked;
+                    Page.fetchLocations({ page: pageClicked });
+                }
+            });
+        }
+    };
+
+    window.yourLLC = window.yourLLC || {};
+    window.yourLLC.Page = Page;
+    Page.setClickDelegation();
+    Page.fetchLocations({ page: 1 });
+</script>
