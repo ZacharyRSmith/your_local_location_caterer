@@ -19,18 +19,18 @@
     // TODO: Prevent async issues
     var crntPageNum = 1;
     var Page = {
-        get crntNum() {
+        get _crntNum() {
             return crntPageNum;
         },
-        get pageLinks() {
-            return document.querySelectorAll('#locations-pagination .page-link');
-        },
-        set crntNum(nextPageNum) {
+        set _crntNum(nextPageNum) {
             $($('#locations-pagination .page-item')[crntPageNum - 1]).removeClass('active');
             $($('#locations-pagination .page-item')[nextPageNum - 1]).addClass('active');
             crntPageNum = nextPageNum;
         },
-        set locations(locations) {
+        get pageLinks() {
+            return document.querySelectorAll('#locations-pagination .page-link');
+        },
+        renderLocations(locations) {
             $('#locations-table tbody').html((function htmlCb(){
                 return locations.reduce(function reduceCb(rows, location) {
                     return rows +
@@ -42,32 +42,32 @@
                 }, '');
             }));
         },
-        setClickDelegation() {
-            $('#locations-pagination').on('click', '.page-link', function onClick(event) {
-                var pageClicked = parseInt(event.target.innerText, 10);
-                if (pageClicked !== Page.crntNum) {
-                    Page.crntNum = pageClicked;
-                    fetchLocations({ page: pageClicked });
-                }
-            });
-        },
         renderNumLinks(num) {
             $('#locations-pagination').html((function (){
                 var links = '';
                 for (var index = 0; index < num; index++) {
                     links +=
-                        '<li class="page-item' + (Page.crntNum == (index + 1) ? ' active' : '') + '">' +
+                        '<li class="page-item' + (Page._crntNum == (index + 1) ? ' active' : '') + '">' +
                             '<a class="page-link">' + (index + 1) + '</a>' +
                         '</li>';
                 }
                 return links;
             }));
+        },
+        setClickDelegation() {
+            $('#locations-pagination').on('click', '.page-link', function onClick(event) {
+                var pageClicked = parseInt(event.target.innerText, 10);
+                if (pageClicked !== Page._crntNum) {
+                    Page._crntNum = pageClicked;
+                    fetchLocations({ page: pageClicked });
+                }
+            });
         }
     };
     function fetchLocations(args) {
         $.getJSON('/locations', { page: args.page })
         .done(function doneCb(results){
-            Page.locations = results.locations;
+            Page.renderLocations(results.locations);
 
             var numNewPageLinks = Math.ceil(results.count / results.perPage); 
             if (numNewPageLinks !== Page.pageLinks.length) {
