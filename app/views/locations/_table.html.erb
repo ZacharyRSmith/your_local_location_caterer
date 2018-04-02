@@ -27,6 +27,19 @@
             $($('#locations-pagination .page-item')[nextPageNum - 1]).addClass('active');
             crntPageNum = nextPageNum;
         },
+        fetchLocations(args) {
+            var page = args && args.page ? args.page : crntPageNum;
+            $.getJSON('/locations', { page: page })
+            .done(function doneCb(results){
+                Page.renderLocations(results.locations);
+
+                var numNewPageLinks = Math.ceil(results.count / results.perPage);
+                if (numNewPageLinks !== Page.pageLinks.length) {
+                    Page.renderNumLinks(numNewPageLinks);
+                }
+            })
+            .fail(alert); // TODO Prettify
+        },
         get pageLinks() {
             return document.querySelectorAll('#locations-pagination .page-link');
         },
@@ -59,24 +72,14 @@
                 var pageClicked = parseInt(event.target.innerText, 10);
                 if (pageClicked !== Page._crntNum) {
                     Page._crntNum = pageClicked;
-                    fetchLocations({ page: pageClicked });
+                    Page.fetchLocations({ page: pageClicked });
                 }
             });
         }
     };
-    function fetchLocations(args) {
-        $.getJSON('/locations', { page: args.page })
-        .done(function doneCb(results){
-            Page.renderLocations(results.locations);
 
-            var numNewPageLinks = Math.ceil(results.count / results.perPage); 
-            if (numNewPageLinks !== Page.pageLinks.length) {
-                Page.renderNumLinks(numNewPageLinks);
-            }
-        })
-        .fail(alert); // TODO Prettify
-    }
-
+    window.yourLLC = window.yourLLC || {};
+    window.yourLLC.Page = Page;
     Page.setClickDelegation();
-    fetchLocations({ page: 1 });
+    Page.fetchLocations({ page: 1 });
 </script>
